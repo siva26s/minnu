@@ -8,48 +8,39 @@
 <script src="https://cdn.jsdelivr.net/npm/qs/dist/qs.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  const loginForm = document.getElementById('loginForm');
-
-loginForm.addEventListener('submit', (event) => {
-  const formData = new URLSearchParams();
-  formData.append('username', document.getElementById('username').value);
-  formData.append('password', document.getElementById('password').value);
-
-  
-  
-   axios.post('https://sstrading.pythonanywhere.com/login',  qs.stringify(formData), {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            })
-            .then(response => {
-                const token = response.data.token;
-                sessionStorage.setItem('minnutoken', token);
-                window.location.href = 'home.html';
-            })
-            .catch(error => {
-                console.error('Error logging in:', error);
-                alert('Invalid username or password. Please try again.');
-            });
-  
-  
-});
+  async function loginVerify(username,password) {
+        try{
+          const data = {
+              "username":"siva",
+              "password":"test11"
+            };
+          const response = await axios.post("https://sstrading.pythonanywhere.com/login", data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }});
+          const token = response.data.token;
+          sessionStorage.setItem('minnu_token', token);
+          window.location.href = 'home.html';
+        }catch(err){
+            console.log(err);
+            alert('Something went wrong.');
+        }
+    }
 </script>
 </head>
 <body>
-<div class="container mt-5">
+<div class="container m-5">
   
-  <form id="loginForm">
-    <div class="mb-3">
-      <label for="username" class="form-label">Username1</label>
+  <div class="m-3">
+      <label for="username" class="form-label">Username2</label>
       <input type="text" class="form-control" id="username" name="username" required>
     </div>
-    <div class="mb-3">
+    <div class="m-3">
       <label for="password" class="form-label">Password</label>
       <input type="password" class="form-control" id="password" name="password" required>
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
+  <div class="m-3">
+      <button class="btn btn-primary" onclick=loginVerify()>Login</button> 
+    </div>
+    
+  
 </div>
 
 
