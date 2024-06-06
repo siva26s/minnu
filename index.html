@@ -42,7 +42,9 @@ loginForm.addEventListener('submit', (event) => {
   })
   .then(response => response.json())
   .then(data => {
-      window.location.href = 'home.html';
+    const token = response.data.token;
+    sessionStorage.setItem('authToken', token);
+    window.location.href = 'home.html';
   })
   .catch(error => {
       console.error('Error logging in:', error);
