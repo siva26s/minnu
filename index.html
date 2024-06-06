@@ -33,7 +33,7 @@ loginForm.addEventListener('submit', (event) => {
   const password = document.getElementById('password').value;
 
   // Make API call to verify user details
-  axios.post('https://sstrading.pythonanywhere.com/login', { username, password })
+  axios.post('https://your-api-endpoint-url.com/login', { username, password })
     .then(response => {
       // Redirect to home page on successful login
       window.location.href = 'home.html';
