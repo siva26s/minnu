@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Configuration Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger {
+            background-color: #DC3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        #storage-list {
+            margin-top: 20px;
+        }
+        .key-value-pair {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .key-value-pair input {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Configuration Manager</h1>
+        <p>Mandatory Keys to fille:app_id,appHash,loginUrl<br>Otpional Keys to fille:defaultSymbol1,defaultQty1</p>
+        <h3>Add new key value to save</h3>
+        <div class="form-group">
+            <label for="key">Key:</label>
+            <input type="text" id="key">
+        </div>
+        <div class="form-group">
+            <label for="value">Value:</label>
+            <input type="text" id="value">
+        </div>
+        <div class="form-group">
+            <button onclick="saveItem()">Save Item</button>
+        </div>
+        <div id="storage-list">
+            <h3>Existing User Configuration Values</h3>
+            <div id="key-value-container">
+                <!-- Existing keys and values will be displayed here -->
+            </div>
+            <div class="form-group">
+                <button onclick="saveAll()">Save All</button>
+                <button class="btn-danger" onclick="clearAll()">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateStorageList() {
+            const container = document.getElementById('key-value-container');
+            container.innerHTML = '';
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+
+                const div = document.createElement('div');
+                div.className = 'key-value-pair';
+
+                const keyInput = document.createElement('input');
+                keyInput.type = 'text';
+                keyInput.value = key;
+                keyInput.className = 'existing-key';
+
+                const valueInput = document.createElement('input');
+                valueInput.type = 'text';
+                valueInput.value = value;
+                valueInput.className = 'existing-value';
+
+                div.appendChild(keyInput);
+                div.appendChild(valueInput);
+                container.appendChild(div);
+            }
+        }
+
+        function saveItem() {
+            const key = document.getElementById('key').value;
+            const value = document.getElementById('value').value;
+            if (key && value) {
+                localStorage.setItem(key, value);
+                //alert('Item saved!');
+                updateStorageList();
+                document.getElementById('key').value="";
+                document.getElementById('value').value="";
+            } else {
+                alert('Please provide both key and value.');
+            }
+        }
+
+        
+
+        function saveAll() {
+            const keys = document.getElementsByClassName('existing-key');
+            const values = document.getElementsByClassName('existing-value');
+            for (let i = 0; i < keys.length; i++) {
+                const key = keys[i].value;
+                const value = values[i].value;
+                if (key && value) {
+                    localStorage.setItem(key, value);
+                }
+            }
+            //alert('All changes saved!');
+            updateStorageList();
+        }
+
+        function clearAll() {
+            if (confirm('Are you sure you want to remove all items?')) {
+                localStorage.clear();
+                //alert('All items removed!');
+                updateStorageList();
+            }
+        }
+
+        // Initial call to display existing keys and values
+        updateStorageList();
+    </script>
+</body>
+</html>
