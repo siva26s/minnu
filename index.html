@@ -69,22 +69,34 @@
             updateLog('SL traking is stoped:');
         }
 		function createCard(item) {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.style.width = '18rem';
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.width = '18rem';
 
-      const cardBody = `
-        <div class="card-body">
-          <h5 class="card-title">${item.v.symbol}</h5>
-          <p class="card-text">Last Price: ${item.v.lp}</p>
-          <p class="card-text">Previous Close Price: ${item.v.prev_close_price}</p>
-         
-        </div>
-      `;
+  const lastPrice = item.v.lp;
+  const prevClosePrice = item.v.prev_close_price;
+  const percentageDifference = ((lastPrice - prevClosePrice) / prevClosePrice * 100).toFixed(2);
 
-      card.innerHTML = cardBody;
-      return card;
-    }
+  if (lastPrice > prevClosePrice) {
+    card.style.backgroundColor = 'green';
+    card.style.color = 'white';
+  } else {
+    card.style.backgroundColor = 'red';
+    card.style.color = 'white';
+  }
+
+  const cardBody = `
+    <div class="card-body">
+      <h5 class="card-title">${item.v.symbol}</h5>
+      <p class="card-text">Last Price: ${lastPrice}</p>
+      <p class="card-text">Previous Close Price: ${prevClosePrice}</p>
+      <p class="card-text">Percentage Difference: ${percentageDifference}%</p>
+    </div>
+  `;
+
+  card.innerHTML = cardBody;
+  return card;
+}
 		function renderCards(data) {
       const cardContainer = document.getElementById('card-container');
       data.d.forEach(item => {
