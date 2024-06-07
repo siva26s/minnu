@@ -14,7 +14,9 @@
             return Math.round(num * 100) / 100 ;
          }
        function updateLog(info) {
-            document.getElementById("loginfo").innerText += info;
+	       const currentText=document.getElementById("loginfo").value;
+	       document.getElementById("loginfo").value = currentText + (currentText ? '\n' : '') + info;
+            
          }
         function getKey(key) {
             return localStorage.getItem(key);
@@ -318,7 +320,7 @@ function populateFormFromLocalStorage() {
 
 	
    <div class="container m-2">
-      <textarea id="loginfo" type="text" class="form-control m-2" value="" >Log Info</textarea >
+      <textarea id="loginfo" type="text" class="form-control m-2" rows="10">Log Info</textarea >
    </div>
    
 
