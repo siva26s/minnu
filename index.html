@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script>
+		function redirectToNextPage() {
+            window.open('localstorage.html', '_blank');
+        }
+       function roundTwoDec(num) {
+            return Math.round(num * 100) / 100 ;
+         }
+       function updateLog(info) {
+            document.getElementById("loginfo").value = info;
+         }
+        function getKey(key) {
+            return localStorage.getItem(key);
+        }
+        function setKey(key,value) {
+            localStorage.setItem(key, value);
+        }
+        function getLoginUrl() {
+            document.getElementById("loginurl").value=getKey("loginUrl");
+        }
+       function getTimeStramp() {
+          const date = new Date();
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const year = String(date.getFullYear()).slice(-2); // Get last two digits of the year
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+
+            return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+        }
+       let intervalId;
+         function SL_tracking() {
+             console.log('SL traking is running.');
+             updateLog('SL traking is running --- '+getTimeStramp());
+        }
+        function startStoplossTracking() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinutes = now.getMinutes();
+            const startTime = new Date(now);
+            const endTime = new Date(now);
+
+            startTime.setHours(9, 20, 0); // 9:20 AM
+            endTime.setHours(15, 20, 0);  // 3:20 PM
+
+            if (now >= startTime && now <= endTime) {
+                // If within the time range, start the interval
+                intervalId = setInterval(SL_tracking, 5000);
+                SL_tracking(); // Optionally call the function immediately
+            } else {
+                // If not within the time range, log the status
+                  updateLog("Current time is outside the allowed range. Interval not started.");
+                //console.log('Current time is outside the allowed range. Interval not started.');
+            }
+        }
+
+        function stopStoplossTracking() {
+            clearInterval(intervalId);
+            updateLog('SL traking is stoped:');
+        }
+       
+        async function refreshNifty() {
+           try{
+              const symbol="NSE:NIFTY50-INDEX"
+              const res = await axios.get("https://api-t1.fyers.in/data/depth?symbol="+symbol+"&ohlcv_flag=1", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }} );
+              document.getElementById("Nifty50Spot").innerText   = roundTwoDec(res.data.d[symbol].ltp );
+            }catch(err){
+                console.log(err);
+            }
+        }
+        async function getLTP(symbol) {
+            try{
+                const res = await axios.get("https://api-t1.fyers.in/data/depth?symbol="+symbol+"&ohlcv_flag=1", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }} );
+                return res.data.d[symbol].ltp;
+            }catch(err){
+                console.log(err);
+            }
+        }
+        async function validateAuthcode() {
+            try{
+               const json = JSON.stringify({grant_type: "authorization_code",appIdHash:getKey("appHash"), code:document.getElementById("authcode").value});
+               const res = await axios.post("https://api-t1.fyers.in/api/v3/validate-authcode", json, { headers: { 'Content-Type': 'application/json'  }} );
+               setKey('token', res.data.access_token);
+            }catch(err){
+                console.log(err);
+            }
+        }
+async function getPositions() {
+            try{
+               const res = await axios.get("https://api-t1.fyers.in/api/v3/positions", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
+               //const json = JSON.stringify({grant_type: "authorization_code",appIdHash:getKey("appHash"), code:document.getElementById("authcode").value});
+               //const res = await axios.get("https://api-t1.fyers.in/api/v3/positions", json, { headers: { 'Content-Type': 'application/json','Authorization': getKey("app_id") + ":" + getKey("token")  }} );
+               populateTable(res.data)
+            }catch(err){
+                console.log(err);
+            }
+        }
+
+       function populateTable(data) {
+        const tableBody = document.getElementById('positionsTable').getElementsByTagName('tbody')[0];
+         tableBody.innerHTML = ''; // Clear all existing rows
+        data.netPositions.forEach(position => {
+            const row = tableBody.insertRow();
+
+            const cellSymbol = row.insertCell(0);
+            const cellNetQty = row.insertCell(1);
+            const cellNetAvg = row.insertCell(2);
+            const cellLtp = row.insertCell(3);
+            const cellpl = row.insertCell(4);
+
+            cellSymbol.textContent = position.symbol;
+            cellNetQty.textContent = position.netQty;
+            cellNetAvg.textContent = position.netAvg;
+            cellLtp.textContent = roundTwoDec(position.ltp);
+            cellpl.textContent = roundTwoDec(position.pl);
+        });
+
+        document.getElementById('overallPlTotal').textContent = roundTwoDec(data.overall.pl_total);
+    }
+
+
+
+
+
+
+
+                async function getBid1(symbol) {
+        try{
+            const res = await axios.get("https://api-t1.fyers.in/data/depth?symbol="+symbol+"&ohlcv_flag=1", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }} );
+            return res.data.d[symbol].bids[0].price;
+        }catch(err){
+            console.log(err);
+        }
+    }
+    async function getAsk1(symbol) {
+        try{
+            const res = await axios.get("https://api-t1.fyers.in/data/depth?symbol="+symbol+"&ohlcv_flag=1", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }} );
+            return res.data.d[symbol].ask[0].price;
+        }catch(err){
+            console.log(err);
+        }
+    }
+    async function Buy(symbol1,qty1) {
+        try{
+		qty1=Number(qty1)
+		let price=0;
+            price=await getAsk1(symbol1);
+	    if(price){}else{price=await getLTP(symbol1);}
+	    const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:1,productType:"MARGIN",limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
+            const res = await axios.post("https://api-t1.fyers.in/api/v3/orders/sync", json, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
+            
+            
+        }catch(err){
+            console.log(err);
+        }
+    }
+    async function Sell(symbol1,qty1) {
+        try{
+		qty1=Number(qty1)
+		let price=0;
+            price=await getAsk1(symbol1);
+		if(price){}else{price=await getLTP(symbol1);}
+            
+            const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:-1,productType:"MARGIN",limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
+            const res = await axios.post("https://api-t1.fyers.in/api/v3/orders/sync", json, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
+            
+            
+        }catch(err){
+            console.log(err);
+        }
+    }
+		async function Buy_INTRADAY(symbol1,qty1) {
+        try{
+		qty1=Number(qty1)
+		let price=0;
+            price=await getAsk1(symbol1);
+	    if(price){}else{price=await getLTP(symbol1);}
+	    const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:1,productType:"INTRADAY",limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
+            const res = await axios.post("https://api-t1.fyers.in/api/v3/orders/sync", json, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
+            
+            
+        }catch(err){
+            console.log(err);
+        }
+    }
+    async function Sell_INTRADAY(symbol1,qty1) {
+        try{
+		qty1=Number(qty1)
+		let price=0;
+            price=await getAsk1(symbol1);
+		if(price){}else{price=await getLTP(symbol1);}
+            
+            const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:-1,productType:"INTRADAY",limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
+            const res = await axios.post("https://api-t1.fyers.in/api/v3/orders/sync", json, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
+            
+            
+        }catch(err){
+            console.log(err);
+        }
+    }
+    // Function to read from local storage and assign to input fields
+function populateFormFromLocalStorage() {
+    const symbol1 = localStorage.getItem('defaultSymbol1');
+    const qty1 = localStorage.getItem('defaultQty1');
+
+    if (symbol1) {
+        document.getElementById('symbol').value = symbol1;
+    }
+
+    if (qty1) {
+        document.getElementById('qty').value = qty1;
+    }
+}
+
+    window.onload = populateFormFromLocalStorage;
+    </script>
+</head>
+<body>
+
+   
+   <div class="container m-2">
+	   
+      <div class="row">
+	      <div class="col">
+                 <button class="btn btn-primary m-2 w-100" onclick="redirectToNextPage()">User Configaration</button>
+              </div>
+            <div class="col">
+                 <button class="btn btn-primary m-2 w-100" onclick=getLoginUrl()>Get Login Url</button>
+              </div>
+         <div class="col">
+                 <input type="text" class="form-control m-2 w-100" id="loginurl" value="" placeholder="Login Url will be featched here">
+              </div>
+   
+         <div class="col">
+                 <input type="text" class="form-control m-2 w-100" id="authcode" value="" placeholder="Enter AuthCode">
+              </div>
+         <div class="col">
+                <button class="btn btn-secondary m-2 w-100"   onclick=validateAuthcode()>Validate</button>
+              </div>
+         <div class="col">
+                 <button class="btn btn-secondary m-2 w-100" onclick=refreshNifty()>Refresh Nifty</button>
+              </div>
+   
+         <div class="col">
+            <button id="Nifty50Spot" class="btn btn-outline-info m-2 w-100">Nifty50Spot</button>
+         </div>
+      </div>
+    </div>
+   
+
+   
+   
+   
+   <div class="container m-2">
+      <button class="btn btn-primary m-2" onclick=getPositions()>Get Positions</button>
+         <table class="table table-striped table-bordered m-2" id="positionsTable">
+           <thead class="thead-dark">
+               <tr>
+                   <th>Symbol</th>
+                   <th>Net Quantity</th>
+                   <th>Net Average</th>
+                   <th>Last Traded Price</th>
+                   <th>Profit/Loss</th>
+               </tr>
+           </thead>
+           <tbody>
+               <!-- Rows will be added here by JavaScript -->
+           </tbody>
+          <tfoot>
+               <tr>
+                   <td colspan="4" class="text-right">Overall PL Total</td>
+                   <td id="overallPlTotal"></td>
+               </tr>
+           </tfoot>
+       </table>
+   </div>
+
+
+
+   
+   
+   <div class="container m-2">
+	   <div class="row">
+                   <div class="col-3">
+		        <input type="text" class="form-control m-2 w-100" id="symbol" value="" placeholder="Symbol">
+                    </div>
+                   <div class="col-3">
+		        <input type="text" class="form-control m-2 w-100" id="qty" value="" placeholder="Qty">
+                    </div>
+                    <div class="col-3">
+		        <button class="btn btn-success m-2 w-100" onclick= "Buy_INTRADAY(document.getElementById('symbol').value,document.getElementById('qty').value)">Buy</button>
+                    </div>
+                   <div class="col-3">
+		        <button class="btn btn-danger m-2 w-100" onclick= "Sell_INTRADAY(document.getElementById('symbol').value,document.getElementById('qty').value)">Sell</button>
+                    </div>
+		   
+	   </div>
+	   
+      
+   </div>
+        
+        
+        
+        <div class="container m-2">
+            <button class="btn btn-primary m-2 w-100" onclick=startStoplossTracking()>Start SL</button>
+            <button class="btn btn-primary m-2 w-100" onclick=stopStoplossTracking()>Stop SL</button>
+         </div> 
+
+
+
+	
+   <div class="container m-2">
+      <input id="loginfo" type="text" class="form-control m-2" value="" placeholder="Log Info">
+   </div>
+   
+
+
+   
+</body>
+</html>
