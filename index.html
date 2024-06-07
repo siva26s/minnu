@@ -223,6 +223,9 @@ function populateFormFromLocalStorage() {
 }
 
     window.onload = populateFormFromLocalStorage;
+
+	setInterval(refreshNifty, 30000);
+	window.onload = refreshNifty;
     </script>
 </head>
 <body>
