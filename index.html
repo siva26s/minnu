@@ -68,7 +68,41 @@
             clearInterval(intervalId);
             updateLog('SL traking is stoped:');
         }
-       
+		function createCard(item) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.width = '18rem';
+
+      const cardBody = `
+        <div class="card-body">
+          <h5 class="card-title">${item.v.symbol}</h5>
+          <p class="card-text">Last Price: ${item.v.lp}</p>
+          <p class="card-text">Previous Close Price: ${item.v.prev_close_price}</p>
+         
+        </div>
+      `;
+
+      card.innerHTML = cardBody;
+      return card;
+    }
+		function renderCards(data) {
+      const cardContainer = document.getElementById('card-container');
+      data.d.forEach(item => {
+        const card = createCard(item);
+        const col = document.createElement('div');
+        col.className = 'col-md-4 mb-4';
+        col.appendChild(card);
+        cardContainer.appendChild(col);
+      });
+    }
+       async function getQuotesRefreshCards(symbols) {
+            try{
+                const res = await axios.get("https://api-t1.fyers.in/data/quotes?symbols="+symbols, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }} );
+                renderCards(res.data);
+            }catch(err){
+                console.log(err);
+            }
+        }
         async function refreshNifty() {
            try{
               const symbol="NSE:NIFTY50-INDEX"
@@ -311,7 +345,12 @@ function populateFormFromLocalStorage() {
 	   
       
    </div>
-        
+
+
+	<div class="container m-2" >
+		<button class="btn btn-primary m-2 w-100" onclick=getQuotesRefreshCards("NSE:TCS-EQ,NSE:HDFCBANK-EQ")>Refresh Cards</button>
+    <div id="card-container" class="row"></div>
+  </div>
         
         
         <div class="container m-2">
