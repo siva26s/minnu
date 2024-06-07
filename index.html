@@ -15,7 +15,7 @@
          }
        function updateLog(info) {
 	       const currentText=document.getElementById("loginfo").value;
-	       document.getElementById("loginfo").value = currentText + (currentText ? '\n' : '') + info;
+	       document.getElementById("loginfo").value = info +'\n'+ currentText;
             
          }
         function getKey(key) {
@@ -320,7 +320,7 @@ function populateFormFromLocalStorage() {
 
 	
    <div class="container m-2">
-      <textarea id="loginfo" type="text" class="form-control m-2" rows="10">Log Info</textarea >
+      <textarea id="loginfo" type="text" placeholder="Log info..." class="form-control m-2" rows="10"></textarea >
    </div>
    
 
