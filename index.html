@@ -87,7 +87,7 @@
 
   const cardBody = `
     <div class="card-body">
-    	<h4 class="card-title">${lastPrice}</h4>
+    	<h5 class="card-title">${lastPrice}</h5>
       	<h5 class="card-title">${item.v.symbol}</h5>
       	<p class="card-text"> ${percentageDifference}%</p>
     </div>
@@ -197,11 +197,15 @@ async function getPositions() {
     }
     async function Buy(symbol1,qty1) {
         try{
+		let productType="MARGIN";
+		if (symbol1.toUpperCase().includes('-EQ')) {
+    			productType="CNC";
+		} 
 		qty1=Number(qty1)
 		let price=0;
             price=await getAsk1(symbol1);
 	    if(price){}else{price=await getLTP(symbol1);}
-	    const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:1,productType:"MARGIN",limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
+	    const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:1,productType:productType,limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
             const res = await axios.post("https://api-t1.fyers.in/api/v3/orders/sync", json, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
             
             
@@ -211,12 +215,16 @@ async function getPositions() {
     }
     async function Sell(symbol1,qty1) {
         try{
+		let productType="MARGIN";
+		if (symbol1.toUpperCase().includes('-EQ')) {
+    			productType="CNC";
+		} 
 		qty1=Number(qty1)
 		let price=0;
             price=await getAsk1(symbol1);
 		if(price){}else{price=await getLTP(symbol1);}
             
-            const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:-1,productType:"MARGIN",limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
+            const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:-1,productType:productType,limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
             const res = await axios.post("https://api-t1.fyers.in/api/v3/orders/sync", json, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
             
             
@@ -224,35 +232,8 @@ async function getPositions() {
             console.log(err);
         }
     }
-		async function Buy_INTRADAY(symbol1,qty1) {
-        try{
-		qty1=Number(qty1)
-		let price=0;
-            price=await getAsk1(symbol1);
-	    if(price){}else{price=await getLTP(symbol1);}
-	    const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:1,productType:"INTRADAY",limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
-            const res = await axios.post("https://api-t1.fyers.in/api/v3/orders/sync", json, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
-            
-            
-        }catch(err){
-            console.log(err);
-        }
-    }
-    async function Sell_INTRADAY(symbol1,qty1) {
-        try{
-		qty1=Number(qty1)
-		let price=0;
-            price=await getAsk1(symbol1);
-		if(price){}else{price=await getLTP(symbol1);}
-            
-            const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:-1,productType:"INTRADAY",limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
-            const res = await axios.post("https://api-t1.fyers.in/api/v3/orders/sync", json, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
-            
-            
-        }catch(err){
-            console.log(err);
-        }
-    }
+		
+    
     // Function to read from local storage and assign to input fields
 function populateFormFromLocalStorage() {
     const symbol1 = localStorage.getItem('defaultSymbol1');
@@ -346,10 +327,10 @@ function populateFormFromLocalStorage() {
 		        <input type="text" class="form-control m-2 w-100" id="qty" value="" placeholder="Qty">
                     </div>
                     <div class="col-3">
-		        <button class="btn btn-success m-2 w-100" onclick= "Buy_INTRADAY(document.getElementById('symbol').value,document.getElementById('qty').value)">Buy</button>
+		        <button class="btn btn-success m-2 w-100" onclick= "Buy(document.getElementById('symbol').value,document.getElementById('qty').value)">Buy</button>
                     </div>
                    <div class="col-3">
-		        <button class="btn btn-danger m-2 w-100" onclick= "Sell_INTRADAY(document.getElementById('symbol').value,document.getElementById('qty').value)">Sell</button>
+		        <button class="btn btn-danger m-2 w-100" onclick= "Sell(document.getElementById('symbol').value,document.getElementById('qty').value)">Sell</button>
                     </div>
 		   
 	   </div>
