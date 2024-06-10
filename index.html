@@ -232,25 +232,35 @@ async function getPositions() {
             console.log(err);
         }
     }
-		
+	function refreshTheseMethods() {
+		console.log('Refresh cards and positions is running.');
+             	updateLog('Refresh cards and positions is running --- '+getTimeStramp());
+		getPositions();
+           	getQuotesRefreshCards("NSE:NIFTY50-INDEX,NSE:NIFTYBANK-INDEX,NSE:NIFTYMIDCAP100-INDEX,NSE:NIFTYSMLCAP250-INDEX,NSE:INFY-EQ,NSE:TCS-EQ,NSE:RELIANCE-EQ,NSE:KOTAKBANK-EQ,NSE:HDFCBANK-EQ,NSE:ICICIBANK-EQ,NSE:HINDUNILVR-EQ,NSE:ITC-EQ,NSE:MARUTI-EQ");
+        }	
     
-    // Function to read from local storage and assign to input fields
-function populateFormFromLocalStorage() {
-    const symbol1 = localStorage.getItem('defaultSymbol1');
-    const qty1 = localStorage.getItem('defaultQty1');
+    function refresh35Seconds() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinutes = now.getMinutes();
+            const startTime = new Date(now);
+            const endTime = new Date(now);
 
-    if (symbol1) {
-        document.getElementById('symbol').value = symbol1;
-    }
+            startTime.setHours(9, 15, 0); // 9:20 AM
+            endTime.setHours(18, 30, 0);  // 3:20 PM
 
-    if (qty1) {
-        document.getElementById('qty').value = qty1;
-    }
-}
+            if (now >= startTime && now <= endTime) {
+                // If within the time range, start the interval
+                setInterval(refreshTheseMethods, 35000);
+                refreshTheseMethods(); // Optionally call the function immediately
+            } else {
+                // If not within the time range, log the status
+                  updateLog("Current time is outside the allowed range. Interval not started.");
+                //console.log('Current time is outside the allowed range. Interval not started.');
+            }
+        }
 
-    window.onload = populateFormFromLocalStorage;
-
-	setInterval(refreshNifty, 35000);
+	refresh35Seconds()
 	window.onload = refreshNifty;
     </script>
 </head>
@@ -346,10 +356,7 @@ function populateFormFromLocalStorage() {
   </div>
         
         
-        <div class="container m-2">
-            <button class="btn btn-primary m-2 w-100" onclick=startStoplossTracking()>Start SL</button>
-            <button class="btn btn-primary m-2 w-100" onclick=stopStoplossTracking()>Stop SL</button>
-         </div> 
+        
 
 
 
