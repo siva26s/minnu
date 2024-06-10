@@ -98,6 +98,7 @@
 }
 		function renderCards(data) {
       const cardContainer = document.getElementById('card-container');
+			cardContainer.innerHTML = ''; // Clear all existing cards
       data.d.forEach(item => {
         const card = createCard(item);
         const col = document.createElement('div');
