@@ -71,10 +71,10 @@
             </div>
             <div class="modal-body">
               <form id="dynamicForm">
-                ${keyValuePairs.map(pair => `
+                ${Object.keys(keyValuePairs).map(key => `
                   <div class="mb-3">
-                    <label for="${pair.key}" class="form-label">${pair.key}</label>
-                    <input type="text" class="form-control" id="${pair.key}" placeholder="${pair.value}">
+                    <label for="${key}" class="form-label">${key}</label>
+                    <input type="text" class="form-control" id="${key}" placeholder="${keyValuePairs[key]}">
                   </div>
                 `).join('')}
               </form>
@@ -91,14 +91,26 @@
     // Insert the modal HTML into the placeholder
     document.getElementById('dynamicModalPlaceholder').innerHTML = modalHtml;
     
+    // Prefill App ID from local storage if it exists
+    const appIdInput = document.getElementById('App ID');
+    const storedAppId = localStorage.getItem('App ID');
+    if (storedAppId) {
+      appIdInput.value = storedAppId;
+    }
+    
     // Add event listener for the save button
     document.getElementById('saveChangesButton').addEventListener('click', function() {
       const formData = {};
-      keyValuePairs.forEach(pair => {
-        formData[pair.key] = document.getElementById(pair.key).value;
+      Object.keys(keyValuePairs).forEach(key => {
+        formData[key] = document.getElementById(key).value;
       });
       
-      // Add your code here to handle the form data
+      // Save each key-value pair to local storage
+      Object.keys(formData).forEach(key => {
+        localStorage.setItem(key, formData[key]);
+      });
+      
+      // Log the form data (for demonstration purposes)
       console.log(formData);
       
       // Close the modal after saving changes
@@ -113,14 +125,15 @@
 
   // Example usage
   document.getElementById('launchModalButton').addEventListener('click', function() {
-    const keyValuePairs = [
-      { key: 'App ID', value: 'Enter App ID' },
-      { key: 'App Secret', value: 'Enter App Secret' },
-      { key: 'Ref Code', value: 'Enter Ref Code' }
-    ];
+    const keyValuePairs = {
+      'App ID': 'Enter App ID',
+      'App Secret': 'Enter App Secret',
+      'Ref Code': 'Enter Ref Code'
+    };
     createDynamicModal(keyValuePairs);
   });
 </script>
+
 
   </body>
 </html>
