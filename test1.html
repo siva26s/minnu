@@ -12,11 +12,16 @@
     <script>
       
       function sha256(message) {
-      const msgBuffer = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      return hashHex;
+      // Check if crypto.subtle is available
+            if (typeof crypto === 'undefined' || !crypto.subtle) {
+                throw new Error('Web Crypto API is not available.');
+            }
+
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
     }
 
 const myString = `${localStorage.getItem('App Id')}:${localStorage.getItem('Secret ID')}`;
