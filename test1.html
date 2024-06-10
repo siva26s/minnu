@@ -71,7 +71,7 @@
 // Example usage
 
 function getAppHash() {
-  const myString = `${getLocalStorageKey('App Id')}:${getLocalStorageKey('Secret ID')}`;
+  const myString = `${localStorage.getItem('App Id')}:${localStorage.getItem('Secret ID')}`;
   const appHash = await sha256(myString);
   consol.log(appHash);
   return appHash;
