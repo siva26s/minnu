@@ -13,7 +13,7 @@
   <body>
     
 
-
+<button class="btn btn-primary m-2 w-100" onclick="getAppHash()">User Configaration</button>
     
    <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -70,9 +70,10 @@
 
 // Example usage
 
-function getAppHash(title,keyValuePairs) {
+function getAppHash() {
   const myString = `${getLocalStorageKey('App Id')}:${getLocalStorageKey('Secret ID')}`;
   const appHash = await sha256(myString);
+  consol.log(appHash);
   return appHash;
 }
       
