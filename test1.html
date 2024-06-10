@@ -17,14 +17,13 @@
     
     
     <script>
-
       function sha256(message) {
-    const msgBuffer = new TextEncoder().encode(message);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-}
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
+    }
 
 // Example usage
 
@@ -131,7 +130,7 @@ function getAppHash() {
   <body>
     
 
-<button class="btn btn-primary m-2 w-100" onclick="getAppHash()">User Configaration</button>
+<button class="btn btn-primary m-2 w-100" onclick=getAppHash()>User Configaration</button>
     
    <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
