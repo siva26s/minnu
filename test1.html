@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
       
-      function sha256(message) {
+      async function sha256(message) {
       // Check if crypto.subtle is available
             if (typeof crypto === 'undefined' || !crypto.subtle) {
                 throw new Error('Web Crypto API is not available.');
@@ -26,7 +26,7 @@
 
 const myString = `${localStorage.getItem('App Id')}:${localStorage.getItem('Secret ID')}`;
         console.log(myString);
-  const appHash = sha256(myString);
+  const appHash = await sha256(myString);
   console.log(appHash);
   
 
