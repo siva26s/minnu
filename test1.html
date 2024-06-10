@@ -91,16 +91,25 @@
     // Insert the modal HTML into the placeholder
     document.getElementById('dynamicModalPlaceholder').innerHTML = modalHtml;
 
-    console.log(keyValuePairs);
-    // Prefill App ID from local storage if it exists
-    keyValuePairs.foreach(key=>
-      {
-        const ele = document.getElementById(key);
+    
+
+    Object.entries(keyValuePairs).forEach(([key, value]) => {
+  const ele = document.getElementById(key);
         const storedVal = localStorage.getItem(key);
         if (storedVal) {
           ele.value = storedVal;
         }
-      })
+});
+    
+    // Prefill App ID from local storage if it exists
+    // keyValuePairs.foreach(key=>
+    //   {
+    //     const ele = document.getElementById(key);
+    //     const storedVal = localStorage.getItem(key);
+    //     if (storedVal) {
+    //       ele.value = storedVal;
+    //     }
+    //   })
     //const appIdInput = document.getElementById('App ID');
     //const storedAppId = localStorage.getItem('App ID');
     //if (storedAppId) {
