@@ -92,11 +92,19 @@
     document.getElementById('dynamicModalPlaceholder').innerHTML = modalHtml;
     
     // Prefill App ID from local storage if it exists
-    const appIdInput = document.getElementById('App ID');
-    const storedAppId = localStorage.getItem('App ID');
-    if (storedAppId) {
-      appIdInput.value = storedAppId;
-    }
+    keyValuePairs.foreach(key=>
+      {
+        const ele = document.getElementById(key);
+        const storedVal = localStorage.getItem(key);
+        if (storedVal) {
+          ele.value = storedVal;
+        }
+      })
+    //const appIdInput = document.getElementById('App ID');
+    //const storedAppId = localStorage.getItem('App ID');
+    //if (storedAppId) {
+      //appIdInput.value = storedAppId;
+    //}
     
     // Add event listener for the save button
     document.getElementById('saveChangesButton').addEventListener('click', function() {
