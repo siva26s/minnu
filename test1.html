@@ -28,97 +28,7 @@
 
 
       
-  function createDynamicModal(title,keyValuePairs) {
-    const modalId = 'dynamicModal';
-    const modalHtml = `
-      <div class="modal fade" id="${modalId}" tabindex="-1" aria-labelledby="${modalId}Label" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="${modalId}Label">${title}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form id="dynamicForm">
-                ${Object.keys(keyValuePairs).map(key => `
-                  <div class="mb-3">
-                    <label for="${key}" class="form-label">${key}</label>
-                    <input type="text" class="form-control" id="${key}" placeholder="${keyValuePairs[key]}">
-                  </div>
-                `).join('')}
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="saveChangesButton">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    // Insert the modal HTML into the placeholder
-    document.getElementById('dynamicModalPlaceholder').innerHTML = modalHtml;
-
-    
-
-    Object.entries(keyValuePairs).forEach(([key, value]) => {
-  const ele = document.getElementById(key);
-        const storedVal = localStorage.getItem(key);
-        if (storedVal) {
-          ele.value = storedVal;
-        }
-});
-    
-    // Prefill App ID from local storage if it exists
-    // keyValuePairs.foreach(key=>
-    //   {
-    //     const ele = document.getElementById(key);
-    //     const storedVal = localStorage.getItem(key);
-    //     if (storedVal) {
-    //       ele.value = storedVal;
-    //     }
-    //   })
-    //const appIdInput = document.getElementById('App ID');
-    //const storedAppId = localStorage.getItem('App ID');
-    //if (storedAppId) {
-      //appIdInput.value = storedAppId;
-    //}
-    
-    // Add event listener for the save button
-    document.getElementById('saveChangesButton').addEventListener('click', function() {
-      const formData = {};
-      Object.keys(keyValuePairs).forEach(key => {
-        formData[key] = document.getElementById(key).value;
-      });
-      
-      // Save each key-value pair to local storage
-      Object.keys(formData).forEach(key => {
-        localStorage.setItem(key, formData[key]);
-      });
-      
-      // Log the form data (for demonstration purposes)
-      console.log(formData);
-      
-      // Close the modal after saving changes
-      const modal = new bootstrap.Modal(document.getElementById(modalId));
-      modal.hide();
-    });
-    
-    // Show the modal
-    const modal = new bootstrap.Modal(document.getElementById(modalId));
-    modal.show();
-  }
-
-  // Example usage
-  document.getElementById('launchModalButton').addEventListener('click', function() {
-    const keyValuePairs = {
-      'App ID': 'Enter App ID',
-      'App Secret': 'Enter App Secret'
-      
-    };
-    createDynamicModal('User Fyers Login Details',keyValuePairs);
-  });
+  
 </script>
   </head>
   <body>
@@ -131,36 +41,7 @@
   Launch static backdrop modal
 </button>
 
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">User Fyers Login Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-
-
-
-
-    <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" id="launchModalButton">
-  Launch dynamic modal
-</button>
-
-<!-- Placeholder for the dynamically generated modal -->
-<div id="dynamicModalPlaceholder"></div>
 
 
     
