@@ -90,7 +90,8 @@
     
     // Insert the modal HTML into the placeholder
     document.getElementById('dynamicModalPlaceholder').innerHTML = modalHtml;
-    
+
+    console.log(keyValuePairs);
     // Prefill App ID from local storage if it exists
     keyValuePairs.foreach(key=>
       {
