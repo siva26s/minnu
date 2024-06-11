@@ -149,7 +149,8 @@
         }
         async function validateAuthcode() {
             try{
-               const json = JSON.stringify({grant_type: "authorization_code",appIdHash:getKey("appHash"), code:document.getElementById("authcode").value});
+		    const hash=await sha256();
+               const json = JSON.stringify({grant_type: "authorization_code",appIdHash:hash, code:document.getElementById("authcode").value});
                const res = await axios.post("https://api-t1.fyers.in/api/v3/validate-authcode", json, { headers: { 'Content-Type': 'application/json'  }} );
                setKey('token', res.data.access_token);
             }catch(err){
