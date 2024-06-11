@@ -7,6 +7,111 @@
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
    
+	
+</head>
+<body>
+
+   
+   <div class="container m-2">
+	   
+      <div class="row">
+	      <div class="col">
+                 <button class="btn btn-primary m-2 w-100" onclick="redirectToNextPage()">User Config</button>
+              </div>
+            
+         <div class="col">
+                 <button class="btn btn-primary m-2 w-100" onclick=redirectToLoinpage()>Fyers Login</button>
+              </div>
+   
+         <div class="col">
+                 <input type="text" class="form-control m-2 w-100" id="authcode" value="" placeholder="Enter AuthCode">
+              </div>
+         <div class="col">
+                <button class="btn btn-secondary m-2 w-100"   onclick=validateAuthcode()>Validate</button>
+              </div>
+         <div class="col">
+                 <button class="btn btn-secondary m-2 w-100" onclick=refreshNifty()>Refresh Nifty</button>
+              </div>
+   
+         <div class="col">
+            <button id="Nifty50Spot" class="btn btn-outline-info m-2 w-100">Nifty50Spot</button>
+         </div>
+      </div>
+    </div>
+   
+
+
+	<div class="container m-2" >
+		<!-- NSE:M&M-EQ,NSE:WIPRO-EQ,NSE:TECHM-EQ,NSE:INFY-EQ,NSE:TATASTEEL-EQ,NSE:ULTRACEMCO-EQ,NSE:BAJFINANCE-EQ,NSE:BHARTIARTL-EQ,NSE:LTIM-EQ,NSE:NTPC-EQ,NSE:TITAN-EQ,NSE:TATAMOTORS-EQ,NSE:ONGC-EQ,NSE:POWERGRID-EQ,NSE:DRREDDY-EQ,NSE:BPCL-EQ,NSE:BAJAJFINSV-EQ,NSE:JSWSTEEL-EQ,NSE:RELIANCE-EQ,NSE:SUNPHARMA-EQ,NSE:HCLTECH-EQ,NSE:GRASIM-EQ,NSE:ADANIPORTS-EQ,NSE:DIVISLAB-EQ,NSE:TCS-EQ,NSE:SBIN-EQ,NSE:AXISBANK-EQ,NSE:HDFCLIFE-EQ,NSE:NESTLEIND-EQ,NSE:CIPLA-EQ,NSE:LT-EQ,NSE:COALINDIA-EQ,NSE:ADANIENT-EQ,NSE:KOTAKBANK-EQ,NSE:HDFCBANK-EQ,NSE:ASIANPAINT-EQ,NSE:HINDUNILVR-EQ,NSE:ICICIBANK-EQ,NSE:MARUTI-EQ,NSE:APOLLOHOSP-EQ,NSE:EICHERMOT-EQ,NSE:HEROMOTOCO-EQ,NSE:ITC-EQ,NSE:INDUSINDBK-EQ,NSE:SHRIRAMFIN-EQ,NSE:BRITANNIA-EQ,NSE:HINDALCO-EQ,NSE:BAJAJ-AUTO-EQ,NSE:TATACONSUM-EQ,NSE:SBILIFE-EQ -->
+		<button class="btn btn-primary m-2 w-100" onclick=getQuotesRefreshCards("NSE:NIFTY50-INDEX,NSE:NIFTYBANK-INDEX,NSE:NIFTYMIDCAP100-INDEX,NSE:NIFTYSMLCAP250-INDEX,NSE:INFY-EQ,NSE:TCS-EQ,NSE:RELIANCE-EQ,NSE:KOTAKBANK-EQ,NSE:HDFCBANK-EQ,NSE:ICICIBANK-EQ,NSE:HINDUNILVR-EQ,NSE:MARUTI-EQ")>Refresh Cards</button>
+    <div id="card-container" class="row"></div>
+  </div>
+   
+   
+   <div class="container m-2">
+      <button class="btn btn-primary m-2 w-100" onclick=getPositions()>Get Positions</button>
+         <table class="table table-striped table-bordered m-2" id="positionsTable">
+           <thead class="thead-dark">
+               <tr>
+                   <th>Symbol</th>
+                   <th>Net Quantity</th>
+                   <th>Net Average</th>
+                   <th>Last Traded Price</th>
+                   <th>Profit/Loss</th>
+               </tr>
+           </thead>
+           <tbody>
+               <!-- Rows will be added here by JavaScript -->
+           </tbody>
+          <tfoot>
+               <tr>
+                   <td colspan="4" class="text-right">Overall PL Total</td>
+                   <td id="overallPlTotal"></td>
+               </tr>
+           </tfoot>
+       </table>
+   </div>
+
+
+
+   
+   
+   <div class="container m-2">
+	   <div class="row">
+                   <div class="col-3">
+		        <input type="text" class="form-control m-2 w-100" id="symbol" value="" placeholder="Symbol">
+                    </div>
+                   <div class="col-3">
+		        <input type="text" class="form-control m-2 w-100" id="qty" value="" placeholder="Qty">
+                    </div>
+                    <div class="col-3">
+		        <button class="btn btn-success m-2 w-100" onclick= "Buy(document.getElementById('symbol').value,document.getElementById('qty').value)">Buy</button>
+                    </div>
+                   <div class="col-3">
+		        <button class="btn btn-danger m-2 w-100" onclick= "Sell(document.getElementById('symbol').value,document.getElementById('qty').value)">Sell</button>
+                    </div>
+		   
+	   </div>
+	   
+      
+   </div>
+
+
+	
+        
+        
+        
+
+
+
+	
+   <div class="container m-2">
+      <textarea id="loginfo" type="text" placeholder="Log info..." class="form-control m-2" rows="10"></textarea >
+   </div>
+   
+
+
+
 	<script type="module">
 	   async function sha256() {
           const myString = `${localStorage.getItem('app_id')}:${localStorage.getItem('secret_id')}`;
@@ -257,111 +362,9 @@ async function getPositions() {
             }
         }
 
-	refresh35Seconds();
+	//refresh35Seconds();
 	//window.onload = refreshNifty;
     </script>
-</head>
-<body>
-
-   
-   <div class="container m-2">
-	   
-      <div class="row">
-	      <div class="col">
-                 <button class="btn btn-primary m-2 w-100" onclick="redirectToNextPage()">User Config</button>
-              </div>
-            
-         <div class="col">
-                 <button class="btn btn-primary m-2 w-100" onclick=redirectToLoinpage()>Fyers Login</button>
-              </div>
-   
-         <div class="col">
-                 <input type="text" class="form-control m-2 w-100" id="authcode" value="" placeholder="Enter AuthCode">
-              </div>
-         <div class="col">
-                <button class="btn btn-secondary m-2 w-100"   onclick=validateAuthcode()>Validate</button>
-              </div>
-         <div class="col">
-                 <button class="btn btn-secondary m-2 w-100" onclick=refreshNifty()>Refresh Nifty</button>
-              </div>
-   
-         <div class="col">
-            <button id="Nifty50Spot" class="btn btn-outline-info m-2 w-100">Nifty50Spot</button>
-         </div>
-      </div>
-    </div>
-   
-
-
-	<div class="container m-2" >
-		<!-- NSE:M&M-EQ,NSE:WIPRO-EQ,NSE:TECHM-EQ,NSE:INFY-EQ,NSE:TATASTEEL-EQ,NSE:ULTRACEMCO-EQ,NSE:BAJFINANCE-EQ,NSE:BHARTIARTL-EQ,NSE:LTIM-EQ,NSE:NTPC-EQ,NSE:TITAN-EQ,NSE:TATAMOTORS-EQ,NSE:ONGC-EQ,NSE:POWERGRID-EQ,NSE:DRREDDY-EQ,NSE:BPCL-EQ,NSE:BAJAJFINSV-EQ,NSE:JSWSTEEL-EQ,NSE:RELIANCE-EQ,NSE:SUNPHARMA-EQ,NSE:HCLTECH-EQ,NSE:GRASIM-EQ,NSE:ADANIPORTS-EQ,NSE:DIVISLAB-EQ,NSE:TCS-EQ,NSE:SBIN-EQ,NSE:AXISBANK-EQ,NSE:HDFCLIFE-EQ,NSE:NESTLEIND-EQ,NSE:CIPLA-EQ,NSE:LT-EQ,NSE:COALINDIA-EQ,NSE:ADANIENT-EQ,NSE:KOTAKBANK-EQ,NSE:HDFCBANK-EQ,NSE:ASIANPAINT-EQ,NSE:HINDUNILVR-EQ,NSE:ICICIBANK-EQ,NSE:MARUTI-EQ,NSE:APOLLOHOSP-EQ,NSE:EICHERMOT-EQ,NSE:HEROMOTOCO-EQ,NSE:ITC-EQ,NSE:INDUSINDBK-EQ,NSE:SHRIRAMFIN-EQ,NSE:BRITANNIA-EQ,NSE:HINDALCO-EQ,NSE:BAJAJ-AUTO-EQ,NSE:TATACONSUM-EQ,NSE:SBILIFE-EQ -->
-		<button class="btn btn-primary m-2 w-100" onclick=getQuotesRefreshCards("NSE:NIFTY50-INDEX,NSE:NIFTYBANK-INDEX,NSE:NIFTYMIDCAP100-INDEX,NSE:NIFTYSMLCAP250-INDEX,NSE:INFY-EQ,NSE:TCS-EQ,NSE:RELIANCE-EQ,NSE:KOTAKBANK-EQ,NSE:HDFCBANK-EQ,NSE:ICICIBANK-EQ,NSE:HINDUNILVR-EQ,NSE:MARUTI-EQ")>Refresh Cards</button>
-    <div id="card-container" class="row"></div>
-  </div>
-   
-   
-   <div class="container m-2">
-      <button class="btn btn-primary m-2 w-100" onclick=getPositions()>Get Positions</button>
-         <table class="table table-striped table-bordered m-2" id="positionsTable">
-           <thead class="thead-dark">
-               <tr>
-                   <th>Symbol</th>
-                   <th>Net Quantity</th>
-                   <th>Net Average</th>
-                   <th>Last Traded Price</th>
-                   <th>Profit/Loss</th>
-               </tr>
-           </thead>
-           <tbody>
-               <!-- Rows will be added here by JavaScript -->
-           </tbody>
-          <tfoot>
-               <tr>
-                   <td colspan="4" class="text-right">Overall PL Total</td>
-                   <td id="overallPlTotal"></td>
-               </tr>
-           </tfoot>
-       </table>
-   </div>
-
-
-
-   
-   
-   <div class="container m-2">
-	   <div class="row">
-                   <div class="col-3">
-		        <input type="text" class="form-control m-2 w-100" id="symbol" value="" placeholder="Symbol">
-                    </div>
-                   <div class="col-3">
-		        <input type="text" class="form-control m-2 w-100" id="qty" value="" placeholder="Qty">
-                    </div>
-                    <div class="col-3">
-		        <button class="btn btn-success m-2 w-100" onclick= "Buy(document.getElementById('symbol').value,document.getElementById('qty').value)">Buy</button>
-                    </div>
-                   <div class="col-3">
-		        <button class="btn btn-danger m-2 w-100" onclick= "Sell(document.getElementById('symbol').value,document.getElementById('qty').value)">Sell</button>
-                    </div>
-		   
-	   </div>
-	   
-      
-   </div>
-
-
-	
-        
-        
-        
-
-
-
-	
-   <div class="container m-2">
-      <textarea id="loginfo" type="text" placeholder="Log info..." class="form-control m-2" rows="10"></textarea >
-   </div>
-   
-
 
    
 </body>
