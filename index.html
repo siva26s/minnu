@@ -112,7 +112,7 @@
 
 
 
-	<script type="module">
+	<script>
 	   async function sha256() {
           const myString = `${localStorage.getItem('app_id')}:${localStorage.getItem('secret_id')}`;
           const msgBuffer = new TextEncoder().encode(myString);
