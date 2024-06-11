@@ -51,37 +51,8 @@
 
             return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
         }
-       let intervalId;
-         function SL_tracking() {
-             console.log('SL traking is running.');
-             updateLog('SL traking is running --- '+getTimeStramp());
-        }
-        function startStoplossTracking() {
-            const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinutes = now.getMinutes();
-            const startTime = new Date(now);
-            const endTime = new Date(now);
-
-            startTime.setHours(9, 20, 0); // 9:20 AM
-            endTime.setHours(15, 20, 0);  // 3:20 PM
-
-            if (now >= startTime && now <= endTime) {
-                // If within the time range, start the interval
-                intervalId = setInterval(SL_tracking, 5000);
-                SL_tracking(); // Optionally call the function immediately
-            } else {
-                // If not within the time range, log the status
-                  updateLog("Current time is outside the allowed range. Interval not started.");
-                console.log('Current time is outside the allowed range. Interval not started.');
-            }
-        }
-
-        function stopStoplossTracking() {
-            clearInterval(intervalId);
-            updateLog('SL traking is stoped:');
-        }
-		function createCard(item) {
+       
+        function createCard(item) {
   const card = document.createElement('div');
   card.className = 'card';
   card.style.width = '18rem';
@@ -147,10 +118,13 @@
         }
         async function validateAuthcode() {
             try{
+		    console.log('validate clicked');
 		    const hash=await sha256();
+		    console.log(hash);
                const json = JSON.stringify({grant_type: "authorization_code",appIdHash:hash, code:document.getElementById("authcode").value});
                const res = await axios.post("https://api-t1.fyers.in/api/v3/validate-authcode", json, { headers: { 'Content-Type': 'application/json'  }} );
-               setKey('token', res.data.access_token);
+               console.log(res);
+		    setKey('token', res.data.access_token);
 		    if(res.data.access_token){
 			    alert("Login Success");
 		    }else{
