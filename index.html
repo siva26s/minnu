@@ -21,7 +21,7 @@
             window.open('localstorage.html', '_blank');
         }
 		function redirectToLoinpage() {
-			let url=`https://api-t1.fyers.in/api/v3/generate-authcode?client_id={localStorage.getItem('App Id')}&redirect_uri=https://trade.fyers.in/api-login/redirect-uri/index.html&response_type=code&state=sample_state`
+			let url=`https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${localStorage.getItem('App Id')}&redirect_uri=https://trade.fyers.in/api-login/redirect-uri/index.html&response_type=code&state=sample_state`
             console.log(url);
 			window.open(url, '_blank');
         }
