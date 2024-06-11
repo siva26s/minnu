@@ -8,7 +8,7 @@
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
    <script type="module">
         async function sha256() {
-          const myString = `${localStorage.getItem('App Id')}:${localStorage.getItem('Secret ID')}`;
+          const myString = `${localStorage.getItem('app_id')}:${localStorage.getItem('secret_id')}`;
           const msgBuffer = new TextEncoder().encode(myString);
           const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
           const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -288,13 +288,11 @@ async function getPositions() {
 	   
       <div class="row">
 	      <div class="col">
-                 <button class="btn btn-primary m-2 w-100" onclick="redirectToNextPage()">User Configaration</button>
+                 <button class="btn btn-primary m-2 w-100" onclick="redirectToNextPage()">User Config</button>
               </div>
-            <div class="col">
-                 <button class="btn btn-primary m-2 w-100" onclick=redirectToLoinpage()>Get Login Url</button>
-              </div>
+            
          <div class="col">
-                 <input type="text" class="form-control m-2 w-100" id="loginurl" value="" placeholder="Login Url will be featched here">
+                 <button class="btn btn-primary m-2 w-100" onclick=redirectToLoinpage()>Fyers Login</button>
               </div>
    
          <div class="col">
