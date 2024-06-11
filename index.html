@@ -90,17 +90,28 @@
    <div class="container m-2">
 	   <div class="row">
                    <div class="col">
-<!-- 			   <label>Symbol</label> -->
-			   <button class="btn btn-success m-2 w-100" onclick= "">'<<'</button>
-		        Symbol:<input type="text" class="form-control m-2 w-100" id="symbol" onchange = "UpdateLTP(document.getElementById('symbol').value)" value="" placeholder="Symbol">
-			   <button class="btn btn-success m-2 w-100" onclick= "">'>>'</button>
+			   <div class="row">
+				<div class="col">
+					<button class="btn btn-success m-2" onclick= ""><<</button>
+				</div>
+				   <div class="col">
+					<label for="floatingInput">Symbol</label>
+			   
+		        <input type="text" class="form-control m-2 w-100" id="symbol" onchange = "UpdateLTP(document.getElementById('symbol').value)" value="" placeholder="Symbol">
+				</div>
+						<div class="col">
+					<button class="btn btn-success m-2" onclick= "">>></button>
+				</div>
+			   </div>
+				
+			   
                     </div>
                    <div class="col">
-<!-- 			   <label>LTP</label> -->
+			<label for="floatingInput">LTP</label>
 		        LTP:<input type="text" class="form-control m-2 w-100" id="ltp1" value="" placeholder="LTP">
                     </div>
 		   <div class="col">
-<!-- 			   <label>QTY</label> -->
+			<label for="floatingInput">Qty</label>
 		        QTY:<input type="text" class="form-control m-2 w-100" id="qty" value="" placeholder="Qty">
                     </div>
                     <div class="col">
