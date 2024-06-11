@@ -89,42 +89,40 @@
    
    <div class="container m-2">
 	   <div class="row">
-                   <div class="col">
-			   <div class="row">
-				<div class="col">
-					<button class="btn btn-success m-2" onclick= ""><<</button>
-				</div>
-				   <div class="col">
-					<label for="floatingInput">Symbol</label>
-			   
-		        <input type="text" class="form-control m-2 w-100" id="symbol" onchange = "UpdateLTP(document.getElementById('symbol').value)" value="" placeholder="Symbol">
-				</div>
-						<div class="col">
-					<button class="btn btn-success m-2" onclick= "">>></button>
-				</div>
-			   </div>
-				
-			   
-                    </div>
-                   <div class="col">
-			<label for="floatingInput">LTP</label>
-		        LTP:<input type="text" class="form-control m-2 w-100" id="ltp1" value="" placeholder="LTP">
-                    </div>
+		<div class="col">
+			<div class="form-floating mb-3">
+			<input type="text" class="form-control m-2 w-100" id="symbol" onchange = "UpdateLTP(document.getElementById('symbol').value)" value="" placeholder="Symbol">
+  			<label for="floatingInput">Symbol</label>
+                	</div>
+		</div>
+
 		   <div class="col">
-			<label for="floatingInput">Qty</label>
-		        QTY:<input type="text" class="form-control m-2 w-100" id="qty" value="" placeholder="Qty">
-                    </div>
-                    <div class="col">
+			<div class="form-floating mb-3">
+			<input type="text" class="form-control m-2 w-100" id="ltp1" value="" placeholder="LTP">
+  			<label for="floatingInput">LTP</label>
+                	</div>
+		</div>
+		   
+		   <div class="col">
+			<div class="form-floating mb-3">
+			<input type="text" class="form-control m-2 w-100" id="qty" value="" placeholder="Qty">
+  			<label for="floatingInput">Qty</label>
+                	</div>
+		</div>
+		   <div class="col">
 		        <button class="btn btn-success m-2 w-100" onclick= "Buy(document.getElementById('symbol').value,document.getElementById('qty').value)">Buy</button>
                     </div>
                    <div class="col">
 		        <button class="btn btn-danger m-2 w-100" onclick= "Sell(document.getElementById('symbol').value,document.getElementById('qty').value)">Sell</button>
                     </div>
+	</div> 
+		
+
+
+
+
 		   
-	   </div>
-	   
-      
-   </div>
+                  
 
 
 	
