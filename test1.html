@@ -16,18 +16,15 @@
 
 
     <script type="module">
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
+        async function sha256() {
+          const myString = `${localStorage.getItem('App Id')}:${localStorage.getItem('Secret ID')}`;
+          const msgBuffer = new TextEncoder().encode(myString);
+          const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+          console.log(hashHex);
+          return hashHex;
         }
-
-        // Example usage
-        const myString = `${localStorage.getItem('App Id')}:${localStorage.getItem('Secret ID')}`;
-        console.log(myString);
-        sha256(myString).then(hash => console.log(hash)).catch(error => console.error('Error:', error));
     </script>
 
     
