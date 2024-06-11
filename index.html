@@ -94,7 +94,7 @@
 		        <button class="btn btn-secondary m-2 w-100 h-100" onclick= "NextStrick()"><<</button>
                     </div>
 
-		 <div class="col-2">
+		 <div class="col-4">
 			<div class="form-floating m-2">
 			<input type="text" class="form-control m-2 w-100" id="symbol" onchange = "UpdateLTP(document.getElementById('symbol').value)" value="" placeholder="Symbol">
   			<label for="symbol">Symbol</label>
@@ -107,14 +107,14 @@
                     </div>
 		   
 				
-			<div class="col-2">
+			<div class="col-1">
 			<div class="form-floating m-2">
 			<input type="text" class="form-control m-2 w-100" id="ltp1" value="" placeholder="LTP">
   			<label for="ltp1">LTP</label>
                 	</div>
 		   </div>	
 				
-		 <div class="col-2">
+		 <div class="col-1">
 			<div class="form-floating m-2">
 			<input type="text" class="form-control m-2 w-100" id="qty" value="" placeholder="Qty">
   			<label for="qty">Qty</label>
@@ -122,11 +122,11 @@
 		   </div>
 
 
-				<div class="col">
+				<div class="col-2">
 		        <button class="btn btn-success m-2 w-100 h-100" onclick= "Buy(document.getElementById('symbol').value,document.getElementById('qty').value)">Buy</button>
                     </div>
                    
-		   <div class="col">
+		   <div class="col-2">
 		        <button class="btn btn-danger m-2 w-100 h-100" onclick= "Sell(document.getElementById('symbol').value,document.getElementById('qty').value)">Sell</button>
                     </div>
                     </div>
@@ -190,9 +190,9 @@ let regex = /(\d+)(CE|PE)$/;
 let match = trimmedString.match(regex);
 
 if (match) {
-  // Extract the number and increase it by 25
+  // Extract the number and increase it by 50
   let number = parseInt(match[1]);
-  let newNumber = number + 25;
+  let newNumber = number + 50;
 
   // Replace the old number with the new number in the trimmed string
   let newTrimmedString = trimmedString.replace(regex, newNumber + match[2]);
