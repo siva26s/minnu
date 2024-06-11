@@ -174,8 +174,8 @@
 
   const lastPrice = item.v.lp;
   const prevClosePrice = item.v.prev_close_price;
-		const change=(lastPrice - prevClosePrice);
-		change=roundTwoDec(change);
+		const change=roundTwoDec(lastPrice - prevClosePrice);
+		
   const percentageDifference = ((lastPrice - prevClosePrice) / prevClosePrice * 100).toFixed(2);
 
   if (lastPrice > prevClosePrice) {
