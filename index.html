@@ -6,9 +6,23 @@
    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <script type="module">
+        async function sha256() {
+          const myString = `${localStorage.getItem('App Id')}:${localStorage.getItem('Secret ID')}`;
+          const msgBuffer = new TextEncoder().encode(myString);
+          const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+          return hashHex;
+        }
+   </script>
 	<script>
 		function redirectToNextPage() {
             window.open('localstorage.html', '_blank');
+        }
+		function redirectToLoinpage() {
+			let url=`https://api-t1.fyers.in/api/v3/generate-authcode?client_id={localStorage.getItem('App Id')}&redirect_uri=https://trade.fyers.in/api-login/redirect-uri/index.html&response_type=code&state=sample_state`
+            window.open(url, '_blank');
         }
        function roundTwoDec(num) {
             return Math.round(num * 100) / 100 ;
@@ -275,7 +289,7 @@ async function getPositions() {
                  <button class="btn btn-primary m-2 w-100" onclick="redirectToNextPage()">User Configaration</button>
               </div>
             <div class="col">
-                 <button class="btn btn-primary m-2 w-100" onclick=getLoginUrl()>Get Login Url</button>
+                 <button class="btn btn-primary m-2 w-100" onclick=redirectToLoinpage()>Get Login Url</button>
               </div>
          <div class="col">
                  <input type="text" class="form-control m-2 w-100" id="loginurl" value="" placeholder="Login Url will be featched here">
