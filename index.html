@@ -91,7 +91,7 @@
    <div class="container m-2">
 	   <div class="row">
 		   <div class="col-1">
-		        <button class="btn btn-secondary m-2 w-100 h-100" onclick= "NextStrick()"><<</button>
+		        <button class="btn btn-secondary m-2 w-100 h-100" onclick= "PreviousStrick()"><<</button>
                     </div>
 
 		 <div class="col-4">
@@ -193,6 +193,39 @@ if (match) {
   // Extract the number and increase it by 50
   let number = parseInt(match[1]);
   let newNumber = number + 50;
+
+  // Replace the old number with the new number in the trimmed string
+  let newTrimmedString = trimmedString.replace(regex, newNumber + match[2]);
+
+  // Combine the first 9 characters with the new trimmed string
+  let newString = inputString.slice(0, 9) + newTrimmedString;
+
+  console.log(newString); // Output: NSE:NIFTY2462024325CE or NSE:NIFTY2462024325PE
+document.getElementById("symbol").value = newString;
+	UpdateLTP(newString);
+	
+} else {
+  console.log("No match found");
+}
+			 }
+		}
+		function PreviousStrick(){
+			let symbol=document.getElementById('symbol').value;
+			 if(symbol&&symbol.toUpperCase().includes("NSE:NIFTY")&&(symbol.toUpperCase().includes("CE")||symbol.toUpperCase().includes("PE"))){
+			 
+			 let inputString = symbol;
+
+// Trim the first 9 characters
+let trimmedString = inputString.slice(9);
+
+// Use a regular expression to capture the number before 'CE' or 'PE'
+let regex = /(\d+)(CE|PE)$/;
+let match = trimmedString.match(regex);
+
+if (match) {
+  // Extract the number and increase it by 50
+  let number = parseInt(match[1]);
+  let newNumber = number - 50;
 
   // Replace the old number with the new number in the trimmed string
   let newTrimmedString = trimmedString.replace(regex, newNumber + match[2]);
