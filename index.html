@@ -485,7 +485,7 @@ async function getPositions() {
 			// console.log("SL... ");
 			data.netPositions.forEach(position => {
             
-
+			console.log("SL... "+position.symbol);
             let symbol = position.symbol;
 	    let netQty = position.netQty;
 	    let qty = position.qty;
@@ -494,6 +494,7 @@ async function getPositions() {
 				let storedData = localStorage.getItem('SL_details');
       if (storedData) {
         sl_data = JSON.parse(storedData);
+	      console.log(sl_data);
 	      if(sl_data.find(obj => obj.symbol === symbol)){
 
 
