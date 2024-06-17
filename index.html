@@ -161,7 +161,7 @@
         
 
  <div class="container m-2">
-      <button class="btn btn-success btn-lg m-2 w-100" onclick= "redirectToSLconfigPage()">SL Config</button>
+      <button class="btn btn-primary m-2 w-100" onclick= "redirectToSLconfigPage()">SL Config</button>
    </div>
    
 
@@ -391,7 +391,8 @@ async function getPositions() {
                const res = await axios.get("https://api-t1.fyers.in/api/v3/positions", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
                //const json = JSON.stringify({grant_type: "authorization_code",appIdHash:getKey("appHash"), code:document.getElementById("authcode").value});
                //const res = await axios.get("https://api-t1.fyers.in/api/v3/positions", json, { headers: { 'Content-Type': 'application/json','Authorization': getKey("app_id") + ":" + getKey("token")  }} );
-               populateTable(res.data)
+               populateTable(res.data);
+		    return res.data;
             }catch(err){
                 console.log(err);
             }
@@ -481,8 +482,16 @@ async function getPositions() {
 	function refreshTheseMethods() {
 		console.log('Refresh cards and positions is running.');
              	updateLog('Refresh cards and positions is running --- '+getTimeStramp());
-		getPositions();
+		res = await getPositions();
            	getQuotesRefreshCards("NSE:NIFTY50-INDEX,NSE:NIFTYBANK-INDEX,NSE:INDIAVIX-INDEX");
+		Check_SL(res)
+        }	
+		function Check_SL(res) {
+			console.log("SL... ");
+			console.log(res);
+			console.log("SL... ");
+			let configData="";
+		
         }	
     
     function refresh35Seconds() {
