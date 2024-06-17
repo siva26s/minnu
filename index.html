@@ -496,8 +496,8 @@ async function getPositions() {
         sl_data = JSON.parse(storedData);
 	      console.log(sl_data);
 	      if(sl_data.find(obj => obj.symbol === symbol)){
-
-
+			console.log("found in local SL data");
+			console.log(netQty);
 
 		      if(netQty && netQty>0){
 			      //need to sell;
