@@ -11,7 +11,14 @@
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     let currentIndex = 0;
-    let data = [
+    let data = [];
+
+	  function loadDataFromLocalStorage() {
+      let storedData = localStorage.getItem('SL_details');
+      if (storedData) {
+        data = JSON.parse(storedData);
+      } else {
+        data = [
       { symbol: "", SL_Price: "", trailing: false },
       { symbol: "", SL_Price: "", trailing: false },
       { symbol: "", SL_Price: "", trailing: false },
@@ -25,7 +32,8 @@
       { symbol: "", SL_Price: "", trailing: false },
       { symbol: "", SL_Price: "", trailing: false }
     ];
-
+      }
+    }
     function findObjectBySymbol(symbol) {
   return data.find(obj => obj.symbol === symbol);
 }
@@ -71,8 +79,11 @@
       document.getElementById('prevButton').disabled = currentIndex === 0;
       document.getElementById('nextButton').disabled = currentIndex === data.length - 1;
     }
-    updateLog()
-    window.onload = loadForm;
+    
+    window.onload = function() {
+      loadDataFromLocalStorage();
+      loadForm();
+    };
   </script>
 </head>
 <body>
