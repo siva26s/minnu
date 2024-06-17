@@ -478,7 +478,16 @@ async function getPositions() {
             console.log(err);
         }
     }
+function calculatePercentageDifference(num1, num2) {
+    // Calculate the difference
+    const difference = num2 - num1;
 
+    // Calculate the percentage difference
+    const percentageDifference = (difference / num1) * 100;
+
+    // Return the result rounded to two decimal places
+    return percentageDifference.toFixed(2);
+}
 		function Check_SL(data) {
 			// console.log("SL... ");
 			// console.log(res);
@@ -499,10 +508,14 @@ async function getPositions() {
 		      sl_dataTemp =sl_data.find(obj => obj.symbol === symbol);
 			//console.log("found in local SL data");
 			//console.log(netQty);
-
+			
 		      if(netQty && netQty>0){
 			      //need to sell;
 			      //console.log("need to sell");
+
+			      
+
+			      
 			      if(ltp<sl_dataTemp.SL_Price){
 
 				      Sell(symbol,qty);
@@ -510,6 +523,7 @@ async function getPositions() {
 		      }else if(netQty && netQty<0){
 			      //need to buy;
 				//console.log("need to buy");
+			      
 			      if(ltp>sl_dataTemp.SL_Price){
 
 				      Buy(symbol,qty);
