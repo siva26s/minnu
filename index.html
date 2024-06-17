@@ -478,7 +478,7 @@ async function getPositions() {
             console.log(err);
         }
     }
-	function refreshTheseMethods() {
+	async function refreshTheseMethods() {
 		console.log('Refresh cards and positions is running.');
              	updateLog('Refresh cards and positions is running --- '+getTimeStramp());
 		res = await getPositions();
