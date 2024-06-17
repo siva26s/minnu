@@ -478,13 +478,7 @@ async function getPositions() {
             console.log(err);
         }
     }
-	async function refreshTheseMethods() {
-		console.log('Refresh cards and positions is running.');
-             	updateLog('Refresh cards and positions is running --- '+getTimeStramp());
-		res = await getPositions();
-           	getQuotesRefreshCards("NSE:NIFTY50-INDEX,NSE:NIFTYBANK-INDEX,NSE:INDIAVIX-INDEX");
-		Check_SL(res)
-        }	
+
 		function Check_SL(data) {
 			// console.log("SL... ");
 			// console.log(res);
@@ -496,12 +490,41 @@ async function getPositions() {
 	    let netQty = position.netQty;
 	    let qty = position.qty;
 	let ltp = roundTwoDec(position.ltp);
+
+				let storedData = localStorage.getItem('SL_details');
+      if (storedData) {
+        sl_data = JSON.parse(storedData);
+	      if(sl_data.find(obj => obj.symbol === symbol)){
+
+
+
+		      if(netQty && netQty>0){
+			      //need to sell;
+			      console.log("need to sell");
+		      }else if(netQty && netQty>0){
+			      //need to buy;
+				console.log("need to buy");
+			      
+		      }
+		      
+	      }
+      } 
 				
         });
 			
 			
 		
+        }
+
+		
+	async function refreshTheseMethods() {
+		console.log('Refresh cards and positions is running.');
+             	updateLog('Refresh cards and positions is running --- '+getTimeStramp());
+		res = await getPositions();
+           	getQuotesRefreshCards("NSE:NIFTY50-INDEX,NSE:NIFTYBANK-INDEX,NSE:INDIAVIX-INDEX");
+		Check_SL(res)
         }	
+			
     
     function refresh35Seconds() {
             const now = new Date();
