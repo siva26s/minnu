@@ -485,11 +485,21 @@ async function getPositions() {
            	getQuotesRefreshCards("NSE:NIFTY50-INDEX,NSE:NIFTYBANK-INDEX,NSE:INDIAVIX-INDEX");
 		Check_SL(res)
         }	
-		function Check_SL(res) {
-			console.log("SL... ");
-			console.log(res);
-			console.log("SL... ");
-			let configData="";
+		function Check_SL(data) {
+			// console.log("SL... ");
+			// console.log(res);
+			// console.log("SL... ");
+			data.netPositions.forEach(position => {
+            
+
+            let symbol = position.symbol;
+	    let netQty = position.netQty;
+	    let qty = position.qty;
+	let ltp = roundTwoDec(position.ltp);
+				
+        });
+			
+			
 		
         }	
     
