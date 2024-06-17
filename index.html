@@ -496,16 +496,23 @@ async function getPositions() {
         sl_data = JSON.parse(storedData);
 	      console.log(sl_data);
 	      if(sl_data.find(obj => obj.symbol === symbol)){
-			console.log("found in local SL data");
-			console.log(netQty);
+			//console.log("found in local SL data");
+			//console.log(netQty);
 
 		      if(netQty && netQty>0){
 			      //need to sell;
-			      console.log("need to sell");
+			      //console.log("need to sell");
+			      if(ltp<obj.SL_Price){
+
+				      Sell(symbol,qty);
+			      }
 		      }else if(netQty && netQty<0){
 			      //need to buy;
-				console.log("need to buy");
-			      
+				//console.log("need to buy");
+			      if(ltp>obj.SL_Price){
+
+				      Buy(symbol,qty);
+			      }
 		      }
 		      
 	      }
