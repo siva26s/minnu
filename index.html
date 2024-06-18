@@ -488,7 +488,38 @@ function calculatePercentageDifference(num1, num2) {
     // Return the result rounded to two decimal places
     return percentageDifference.toFixed(2);
 }
+function calculatePercentage(value, percentage) {
+    return value * (percentage / 100);
+}
+let sl_data = [];
+function loadDataFromLocalStorage() {
+      let storedData = localStorage.getItem('SL_details');
+      if (storedData) {
+        sl_data = JSON.parse(storedData);
+      } else {
+        SL_Local = [
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false },
+      { symbol: "", SL_Price: "", trailing: false }
+    ];
+      }
+    }
+    function saveToLocalStorage() {
+      let dataString = JSON.stringify(sl_data);
+      localStorage.setItem('SL_details', dataString);
+      
+    }
 		function Check_SL(data) {
+            loadDataFromLocalStorage();
 			// console.log("SL... ");
 			// console.log(res);
 			// console.log("SL... ");
@@ -500,15 +531,35 @@ function calculatePercentageDifference(num1, num2) {
 	    let qty = position.qty;
 	let ltp = roundTwoDec(position.ltp);
 
-				let storedData = localStorage.getItem('SL_details');
-      if (storedData) {
-        sl_data = JSON.parse(storedData);
+				
+      if (sl_data) {
+        
 	      //console.log(sl_data);
 	      if(sl_data.find(obj => obj.symbol === symbol)){
 		      sl_dataTemp =sl_data.find(obj => obj.symbol === symbol);
 			//console.log("found in local SL data");
 			//console.log(netQty);
-			
+			if(sl_dataTemp.trailing)
+                  {
+                    if(sl_dataTemp.SL_Price>ltp){
+                        // console.log("s1");
+                        // console.log(calculatePercentageDifference(ltp,sl_dataTemp.SL_Price));
+                        if(calculatePercentageDifference(ltp,sl_dataTemp.SL_Price)>70){
+                            // console.log("mofy...");
+                            // console.log(calculatePercentage(ltp,150));
+                            sl_dataTemp.SL_Price=calculatePercentage(ltp,150);
+                        }
+                    }else{
+                        // console.log("s2");
+                        // console.log(calculatePercentageDifference(sl_dataTemp.SL_Price,ltp));
+                        if(calculatePercentageDifference(sl_dataTemp.SL_Price,ltp)>70){
+                            // console.log("mofy...");
+                            // console.log(calculatePercentage(ltp,50));
+                            sl_dataTemp.SL_Price=calculatePercentage(ltp,50);
+                        }
+                    }
+                    
+                    }
 		      if(netQty && netQty>0){
 			      //need to sell;
 			      //console.log("need to sell");
@@ -526,17 +577,17 @@ function calculatePercentageDifference(num1, num2) {
 			      
 			      if(ltp>sl_dataTemp.SL_Price){
 
-				      Buy(symbol,qty);
+				     Buy(symbol,qty);
 			      }
 		      }
 		      
 	      }
       } 
-				
+      
         });
 			
 			
-		
+		saveToLocalStorage();	
         }
 
 		
@@ -556,8 +607,8 @@ function calculatePercentageDifference(num1, num2) {
             const startTime = new Date(now);
             const endTime = new Date(now);
 
-            startTime.setHours(9, 15, 0); // 9:15 AM
-            endTime.setHours(18, 30, 0);  // 3:30 PM
+            startTime.setHours(9, 16, 0); // 9:15 AM
+            endTime.setHours(15, 29, 0);  // 3:30 PM
 
             if (now >= startTime && now <= endTime) {
                 // If within the time range, start the interval
