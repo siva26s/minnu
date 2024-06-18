@@ -454,7 +454,7 @@ async function getPositions() {
 	    const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:1,productType:productType,limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
             const res = await axios.post("https://api-t1.fyers.in/api/v3/orders/sync", json, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
             
-            
+            getPositions();
         }catch(err){
             console.log(err);
         }
@@ -472,7 +472,7 @@ async function getPositions() {
             
             const json = JSON.stringify({symbol: symbol1,qty:qty1,type:1,side:-1,productType:productType,limitPrice:price,stopPrice:0,validity:"DAY",disclosedQty:0,offlineOrder:false,stopLoss:0, takeProfit:0});
             const res = await axios.post("https://api-t1.fyers.in/api/v3/orders/sync", json, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
-            
+            getPositions();
             
         }catch(err){
             console.log(err);
