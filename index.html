@@ -19,11 +19,11 @@
                  <button class="btn btn-outline-info btn-lg m-2 w-100" onclick="UpdateFunds()">Minnu</button>
               </div>
             <div class="col-3">
-		    <input type="text" class="form-control m-2 w-100" id="usedfunds" value="" placeholder="UsedFunds">
+		    <input type="text" class="form-control m-2 w-100" id="usedfunds" style="color:red;font-weight: bold;" value="" placeholder="UsedFunds">
                  
               </div>
          <div class="col-3">
-		 <input type="text" class="form-control m-2 w-100" id="availablefunds" value="" placeholder="AvailableFunds">
+		 <input type="text" class="form-control m-2 w-100" id="availablefunds" style="color:green;font-weight: bold;" value="" placeholder="AvailableFunds">
                  
               </div>
       </div>
@@ -378,8 +378,8 @@ document.getElementById("symbol").value = newString;
 		     const requiredFields = res.data.fund_limit.filter(item => requiredTitles.includes(item.title));
 		    console.log("-----------------");
 		    console.log(requiredFields);
-		    document.getElementById('usedfunds').value=requiredFields[0].equityAmount;
-		    document.getElementById('availablefunds').value=requiredFields[1].equityAmount;
+		    document.getElementById('usedfunds').value=roundTwoDec(requiredFields[0].equityAmount);
+		    document.getElementById('availablefunds').value=roundTwoDec(requiredFields[1].equityAmount);
             }catch(err){
                 console.log(err);
             }
