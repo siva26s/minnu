@@ -381,7 +381,7 @@ document.getElementById("symbol").value = newString;
 		    if(symbol&&(symbol.toUpperCase().includes("CE")||symbol.toUpperCase().includes("PE")||symbol.toUpperCase().includes("-EQ"))){
 			     console.log('updateLTP2 Fiered');
                 const res = await axios.get("https://api-t1.fyers.in/data/quotes?symbols="+symbol, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }} );
-                   document.getElementById('ltp2').innerText=res.data.d[0].v.lp;
+                   document.getElementById('ltp2').value=res.data.d[0].v.lp;
 		    }
 		   
             }catch(err){
