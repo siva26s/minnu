@@ -373,13 +373,13 @@ document.getElementById("symbol").value = newString;
 		async function UpdateFunds() {
             try{
                 const res = await axios.get("https://api-t1.fyers.in/api/v3/funds", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }} );
-		    console.log(res);
+		    console.log(res.data);
                 const requiredTitles = ["Utilized Amount", "Available Balance"];
 		     const requiredFields = res.data.fund_limit.filter(item => requiredTitles.includes(item.title));
 		    console.log("-----------------");
 		    console.log(requiredFields);
-		    document.getElementById('usedfunds').value=requiredFields[0]["equityAmount"];
-		    document.getElementById('availablefunds').value=requiredFields[1]["equityAmount"];
+		    document.getElementById('usedfunds').value=requiredFields[0].equityAmount;
+		    document.getElementById('availablefunds').value=requiredFields[1].equityAmount;
             }catch(err){
                 console.log(err);
             }
