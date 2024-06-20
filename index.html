@@ -15,11 +15,15 @@
    <div class="container m-2">
 	   
       <div class="row">
-	      <div class="col">
-                 <button class="btn btn-outline-info btn-lg m-2 w-100">Minnu</button>
+	      <div class="col-10">
+                 <button class="btn btn-outline-info btn-lg m-2 w-100" onclick="UpdateFunds()">Minnu</button>
               </div>
-            
-         
+            <div class="col-1">
+                 <button class="btn btn-danget btn-lg m-2 w-100" id="usedfunds">Used</button>
+              </div>
+         <div class="col-1">
+                 <button class="btn btn-success btn-lg m-2 w-100" id="availablefunds">Available</button>
+              </div>
       </div>
     </div>
 
@@ -360,6 +364,20 @@ document.getElementById("symbol").value = newString;
             try{
                 const res = await axios.get("https://api-t1.fyers.in/data/quotes?symbols="+symbols, { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }} );
                 renderCards(res.data);
+            }catch(err){
+                console.log(err);
+            }
+        }
+		async function UpdateFunds() {
+            try{
+                const res = await axios.get("https://api-t1.fyers.in/api/v3/funds", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }} );
+		    console.log(res);
+                const requiredTitles = ["Utilized Amount", "Available Balance"];
+		     const requiredFields = res.data.fund_limit.filter(item => requiredTitles.includes(item.title));
+		    console.log("-----------------");
+		    console.log(requiredFields);
+		    document.getElementById('usedfunds').value=requiredFields[0]["equityAmount"];
+		    document.getElementById('availablefunds').value=requiredFields[1]["equityAmount"];
             }catch(err){
                 console.log(err);
             }
