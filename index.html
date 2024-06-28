@@ -489,7 +489,7 @@ async function getPositions() {
             cellpl.textContent = roundTwoDec(position.pl);
         });
 
-        document.getElementById('overallPlTotal').textContent = roundTwoDec(data.overall.pl_total);
+        document.getElementById('overallPlTotal').textContent = formatNumber(roundTwoDec(data.overall.pl_total));
     }
 
 
