@@ -295,15 +295,21 @@ document.getElementById("symbol").value = newString;
 			 }
 		}
 		function formatNumber(number) {
-  if (number >= 10000000) {
-    return (number / 10000000).toFixed(2) + ' cr';
-  } else if (number >= 100000) {
-    return (number / 100000).toFixed(2) + ' lac';
-  } else if (number >= 1000) {
-    return (number / 1000).toFixed(1) + ' k';
+  const isNegative = number < 0;
+  const absoluteNumber = Math.abs(number);
+
+  let formattedNumber;
+  if (absoluteNumber >= 10000000) {
+    formattedNumber = (absoluteNumber / 10000000).toFixed(2) + ' cr';
+  } else if (absoluteNumber >= 100000) {
+    formattedNumber = (absoluteNumber / 100000).toFixed(2) + ' lac';
+  } else if (absoluteNumber >= 1000) {
+    formattedNumber = (absoluteNumber / 1000).toFixed(1) + 'k';
   } else {
-    return number.toString();
+    formattedNumber = absoluteNumber.toString();
   }
+
+  return isNegative ? '-' + formattedNumber : formattedNumber;
 }
        function roundTwoDec(num) {
             return Math.round(num * 100) / 100 ;
