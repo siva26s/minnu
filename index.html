@@ -523,7 +523,7 @@ async function getPositions() {
     async function Buy(symbol1,qty1) {
         try{
 		let productType="MARGIN";
-		let checkValue=15;
+		let checkValue=10;
 		if (symbol1.toUpperCase().includes('-EQ')) {
     			productType="CNC";
 			checkValue=4;
@@ -548,7 +548,7 @@ async function getPositions() {
     async function Sell(symbol1,qty1) {
         try{
 		let productType="MARGIN";
-		let checkValue=15;
+		let checkValue=10;
 		if (symbol1.toUpperCase().includes('-EQ')) {
     			productType="CNC";
 			checkValue=4;
