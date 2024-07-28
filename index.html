@@ -523,12 +523,14 @@ async function getPositions() {
     async function Buy(symbol1,qty1) {
         try{
 		let productType="MARGIN";
+		let checkValue=15;
 		if (symbol1.toUpperCase().includes('-EQ')) {
     			productType="CNC";
+			checkValue=4;
 		} 
 		qty1=Number(qty1)
 		let price=await getLTP(symbol1);
-		let diff=calculatePercentage(price,10);
+		let diff=calculatePercentage(price,checkValue);
 		price=price+diff;
 		price=roundTwoDec(price);
 		price=roundToNearestFiveCents(price);
@@ -546,12 +548,14 @@ async function getPositions() {
     async function Sell(symbol1,qty1) {
         try{
 		let productType="MARGIN";
+		let checkValue=15;
 		if (symbol1.toUpperCase().includes('-EQ')) {
     			productType="CNC";
+			checkValue=4;
 		} 
 		qty1=Number(qty1)
 		let price=await getLTP(symbol1);
-		let diff=calculatePercentage(price,10);
+		let diff=calculatePercentage(price,checkValue);
 		price=price-diff;
 		price=roundTwoDec(price);
 		price=roundToNearestFiveCents(price);
