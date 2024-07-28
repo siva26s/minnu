@@ -531,6 +531,7 @@ async function getPositions() {
 		let diff=calculatePercentage(price,10);
 		price=price+diff;
 		price=roundTwoDec(price);
+		price=roundToNearestFiveCents(price);
 		//let price=0;
                //price=await getAsk1(symbol1);
 	       //if(price){}else{price=await getLTP(symbol1);}
@@ -553,6 +554,7 @@ async function getPositions() {
 		let diff=calculatePercentage(price,10);
 		price=price-diff;
 		price=roundTwoDec(price);
+		price=roundToNearestFiveCents(price);
 		//let price=0
             	//price=await getAsk1(symbol1);
 		//if(price){}else{price=await getLTP(symbol1);}
@@ -565,6 +567,9 @@ async function getPositions() {
             console.log(err);
         }
     }
+		function roundToNearestFiveCents(num) {
+    return Math.round(num * 20) / 20;
+}
 function calculatePercentageDifference(num1, num2) {
     // Calculate the difference
     const difference = num2 - num1;
