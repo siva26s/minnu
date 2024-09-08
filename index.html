@@ -96,6 +96,38 @@
 		
       
    </div>
+
+
+   <div class="container m-2">
+    <div class="row">
+
+      <div class="col-4">
+        <div class="form-floating m-2">
+        <input type="text" class="form-control m-2 w-100" id="perDiff" value="" placeholder="% Diff">
+          <label for="perDiff">% Diff</label>
+                    </div>
+         </div>
+
+      <div class="col-4">
+        <button class="btn btn-warning m-2 w-100" onclick="AdjustPositions(50,document.getElementById('newPer').value)">Adjust Positions</button>
+      </div>
+      
+      <div class="col-4">
+        <div class="form-floating m-2">
+        <input type="text" class="form-control m-2 w-100" id="newPer" value="75" placeholder="New%">
+          <label for="newPer">New%</label>
+                    </div>
+         </div>
+
+
+
+
+
+    </div>
+       
+ </div>
+
+
    <div class="container m-2">
       <button class="btn btn-primary m-2 w-100" onclick=getPositions()>Get Positions</button>
          <table class="table table-striped table-bordered m-2" id="positionsTable">
@@ -470,7 +502,7 @@ async function getPositions() {
                //const json = JSON.stringify({grant_type: "authorization_code",appIdHash:getKey("appHash"), code:document.getElementById("authcode").value});
                //const res = await axios.get("https://api-t1.fyers.in/api/v3/positions", json, { headers: { 'Content-Type': 'application/json','Authorization': getKey("app_id") + ":" + getKey("token")  }} );
                populateTable(res.data);
-		    return res.data;
+		          return res.data;
             }catch(err){
                 console.log(err);
             }
@@ -499,7 +531,102 @@ async function getPositions() {
     }
 
 
+    async function getAndUpdatePercentageDiff(stratAdjutment,adjustWithNew){
+      const res = await axios.get("https://api-t1.fyers.in/api/v3/positions", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
+      let perDiff ="NA"    
+      if(res.data.netPositions.length>1){
+            
+                    var ce_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().endsWith("CE"));
+                    var pe_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().endsWith("PE"));
 
+                    if(pe_.length>1|ce_.length>1){
+                        perDiff="Mutiple CE/PE Found";
+                    }else{
+                      console.log(ce_[0].symbol+" - "+ce_[0].netQty);
+                    console.log(pe_[0].symbol+" - "+pe_[0].netQty);
+
+                    perDiff = Math.abs(ce_[0].ltp-pe_[0].ltp)/Math.max(ce_[0].ltp,pe_[0].ltp)*100;
+                    }
+
+                    
+                    
+
+                    
+
+      }else{
+        perDiff = "Positions not found";
+      }
+      document.getElementById('perDiff').value = perDiff;
+    }
+
+async function AdjustPositions(stratAdjutment,adjustWithNew){
+  console.log(stratAdjutment);
+  console.log(adjustWithNew);
+  const res = await axios.get("https://api-t1.fyers.in/api/v3/positions", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
+  if(res.data.netPositions.length>1){
+                    var ce_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().endsWith("CE"));
+                    var pe_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().endsWith("PE"));
+
+                    if(pe_.length>1|ce_.length>1){
+                        console.log("Mutiple CE/PE Found");
+                        return;
+                    }
+
+                    console.log(ce_[0].symbol+" - "+ce_[0].netQty);
+                    console.log(pe_[0].symbol+" - "+pe_[0].netQty);
+
+                    let perDiff = Math.abs(ce_[0].ltp-pe_[0].ltp)/Math.max(ce_[0].ltp,pe_[0].ltp)*100;
+                    let newPremium = Math.max(ce_[0].ltp,pe_[0].ltp)*(adjustWithNew/100);
+
+
+                    const weekinfo=pe_[0].symbol.toUpperCase().replace("NSE:NIFTY","").substr(0,5)
+                    
+                    const from=pe_[0].symbol.toUpperCase().replace("NSE:NIFTY"+weekinfo,"").replace("PE","");
+                    const to=ce_[0].symbol.toUpperCase().replace("NSE:NIFTY"+weekinfo,"").replace("CE","");
+
+                    if(perDiff>stratAdjutment){
+                        if(ce_[0].ltp<pe_[0].ltp){
+                            await Buy(ce_[0].symbol, ce_[0].qty);
+                            let strick=to-50;
+                            let tmp1 = await getLTP("NSE:NIFTY"+weekinfo+strick+"CE");
+                            while(tmp1<newPremium){
+                                if(strick==from){
+                                    break;
+                                }
+                                strick=strick-50;
+                                tmp1 = await getLTP("NSE:NIFTY"+weekinfo+strick+"CE");
+                                
+                            }
+
+                            await Sell("NSE:NIFTY"+weekinfo+strick+"CE",ce_[0].qty);
+                            
+
+
+
+                        }
+                        else{
+                            await Buy(pe_[0].symbol, pe_[0].qty);
+                            let strick=from+50;
+                            let tmp1 = await getLTP("NSE:NIFTY"+weekinfo+strick+"PE");
+                            while(tmp1<newPremium){
+                                if(strick==to){
+                                    break;
+                                }
+                                strick=strick+50;
+                                tmp1 = await getLTP("NSE:NIFTY"+weekinfo+strick+"PE");
+                                
+                            }
+
+                            await Sell("NSE:NIFTY"+weekinfo+strick+"PE",pe_[0].qty);
+                            
+
+
+
+                        }
+                    }
+
+                }
+}
 
 
 
@@ -693,6 +820,7 @@ function loadDataFromLocalStorage() {
 		res = await getPositions();
            	getQuotesRefreshCards("NSE:NIFTY50-INDEX,NSE:NIFTYBANK-INDEX,NSE:INDIAVIX-INDEX");
 		Check_SL(res)
+    getAndUpdatePercentageDiff()
         }	
 			
     
@@ -708,7 +836,7 @@ function loadDataFromLocalStorage() {
 
             if (now >= startTime && now <= endTime) {
                 // If within the time range, start the interval
-                setInterval(refreshTheseMethods, 35000);
+                setInterval(refreshTheseMethods, 30000);
                 refreshTheseMethods(); // Optionally call the function immediately
             } else {
                 // If not within the time range, log the status
