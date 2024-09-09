@@ -530,7 +530,7 @@ async function getPositions() {
         document.getElementById('overallPlTotal').innerText = formatNumber(roundTwoDec(data.overall.pl_total));
     }
 
-
+async function isNumber(value){return typeof value==='number'&&! Number.isNaN(value);}
     async function getAndUpdatePercentageDiff(stratAdjutment,adjustWithNew){
       const res = await axios.get("https://api-t1.fyers.in/api/v3/positions", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
       let perDiff ="NA"    
@@ -545,7 +545,7 @@ async function getPositions() {
                       console.log(ce_[0].symbol+" - "+ce_[0].netQty);
                     console.log(pe_[0].symbol+" - "+pe_[0].netQty);
 
-                    perDiff = Math.abs(ce_[0].ltp-pe_[0].ltp)/Math.max(ce_[0].ltp,pe_[0].ltp)*100;
+                    perDiff =  roundToNearestFiveCents(Math.abs(ce_[0].ltp-pe_[0].ltp)/Math.max(ce_[0].ltp,pe_[0].ltp)*100);
                     }
 
                     
