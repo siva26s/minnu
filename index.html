@@ -536,8 +536,8 @@ async function isNumber(value){return typeof value==='number'&&! Number.isNaN(va
       let perDiff ="NA"    
       if(res.data.netPositions.length>1){
             
-                    var ce_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().endsWith("CE"));
-                    var pe_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().endsWith("PE"));
+                    var ce_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().startsWith("NSE:NIFTY")&x.symbol.toUpperCase().endsWith("CE"));
+                    var pe_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().startsWith("NSE:NIFTY")&x.symbol.toUpperCase().endsWith("PE"));
 
                     if(pe_.length>1|ce_.length>1){
                         perDiff="Mutiple CE/PE Found";
@@ -564,8 +564,8 @@ async function AdjustPositions(stratAdjutment,adjustWithNew){
   console.log(adjustWithNew);
   const res = await axios.get("https://api-t1.fyers.in/api/v3/positions", { headers: { 'Content-Type': 'application/json' ,'Authorization': getKey("app_id") + ":" + getKey("token") }});
   if(res.data.netPositions.length>1){
-                    var ce_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().endsWith("CE"));
-                    var pe_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().endsWith("PE"));
+                     var ce_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().startsWith("NSE:NIFTY")&x.symbol.toUpperCase().endsWith("CE"));
+                    var pe_ =res.data.netPositions.filter((x)=>x.netQty!=0&x.symbol.toUpperCase().startsWith("NSE:NIFTY")&x.symbol.toUpperCase().endsWith("PE"));
 
                     if(pe_.length>1|ce_.length>1){
                         console.log("Mutiple CE/PE Found");
